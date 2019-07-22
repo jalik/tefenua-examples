@@ -1,28 +1,12 @@
-// Initialise la carte TeFenua quand le DOM est prêt
+// Initialise la carte TeFenua quand le DOM est prêt.
 document.addEventListener('DOMContentLoaded', function () {
-  // Prépare la couche TeFenua
+  // Prépare la couche TeFenua.
   var tefenuaLayer = createTeFenuaLayer();
 
-  // Prépare la vue de la carte
-  var mapView = createDefaultMapView();
+  // Prépare la carte OpenLayers.
+  var map = createDefaultMap([tefenuaLayer]);
 
-  // Prépare la carte OpenLayers
-  // http://openlayers.org/en/master/apidoc/ol.Map.html
-  var map = new ol.Map({
-    // N'afficher aucun contrôle
-    controls: [],
-    // Couches de la carte
-    layers: [tefenuaLayer],
-    // ID de l'élément où afficher la carte
-    target: 'map',
-    // Charger la carte pendant les animations
-    loadTilesWhileAnimating: false,
-    // Charger la carte pendant les interactions
-    loadTilesWhileInteracting: false,
-    view: mapView,
-  });
-
-  // Affiche l'emplacement cliqué dans la console
+  // Affiche l'emplacement cliqué dans la console.
   map.on('click', function (ev) {
     console.log('clicked @:', ev.coordinate);
   });

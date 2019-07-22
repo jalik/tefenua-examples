@@ -12,6 +12,28 @@ function createDefaultMapView() {
 }
 
 /**
+ * Créé une carte par défaut.
+ * @param layers
+ * @return {ol.Map}
+ */
+function createDefaultMap(layers) {
+  // http://openlayers.org/en/master/apidoc/ol.Map.html
+  return new ol.Map({
+    // N'afficher aucun contrôle
+    controls: [],
+    // Couches de la carte
+    layers: layers,
+    // ID de l'élément où afficher la carte
+    target: 'map',
+    // Charger la carte pendant les animations
+    loadTilesWhileAnimating: false,
+    // Charger la carte pendant les interactions
+    loadTilesWhileInteracting: false,
+    view: createDefaultMapView(),
+  });
+}
+
+/**
  * Créé un marqueur.
  * @param lonLat
  * @return {ol.Feature}

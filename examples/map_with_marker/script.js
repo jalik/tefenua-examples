@@ -1,34 +1,16 @@
-// Initialise la carte TeFenua quand le DOM est prêt
+// Initialise la carte TeFenua quand le DOM est prêt.
 document.addEventListener('DOMContentLoaded', function () {
   // Prépare la couche TeFenua
   var tefenuaLayer = createTeFenuaLayer();
 
-  // Prépare la vue de la carte
-  var mapView = createDefaultMapView();
-
   // Prépare la couche des marqueurs.
   var markerLayer = createMarkerLayer();
 
-  // Prépare la carte OpenLayers
-  // http://openlayers.org/en/master/apidoc/ol.Map.html
-  var map = new ol.Map({
-    // N'afficher aucun contrôle
-    controls: [],
-    // Couches de la carte
-    layers: [tefenuaLayer, markerLayer],
-    // ID de l'élément où afficher la carte
-    target: 'map',
-    // Charger la carte pendant les animations
-    loadTilesWhileAnimating: false,
-    // Charger la carte pendant les interactions
-    loadTilesWhileInteracting: false,
-    view: mapView,
-  });
+  // Prépare la carte OpenLayers.
+  var map = createDefaultMap([tefenuaLayer, markerLayer]);
 
-  // Crée un marqueur.
+  // Ajoute un marqueur au centre de la carte.
   var marker = createMarkerFeature(map.getView().getCenter());
-
-  // Ajoute le marqueur sur la couche des marqueurs
   markerLayer.getSource().addFeature(marker);
 
   // Ajoute un marqueur à l'emplacement cliqué.
