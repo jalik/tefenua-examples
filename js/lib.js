@@ -19,12 +19,15 @@ function createMarkerFeature(lonLat) {
 function createMarkerStyle() {
   return new ol.style.Style({
     // http://openlayers.org/en/master/apidoc/ol.style.Icon.html
+    fill: new ol.style.Fill({
+      color: '#FFFFFF',
+    }),
     image: new ol.style.Icon({
       anchor: [0.5, 1],
       anchorXUnits: 'fraction',
       anchorYUnits: 'fraction',
       scale: 0.15,
-      src: './images/marker.png',
+      src: '../../images/marker.png',
     }),
   });
 

@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Ajoute un marqueur à l'emplacement cliqué.
   map.on('click', function (ev) {
+    console.log('clicked @', ev.coordinate);
     var newMarker = createMarkerFeature(ev.coordinate);
     markerLayer.getSource().addFeature(newMarker);
   });
