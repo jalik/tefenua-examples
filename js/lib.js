@@ -105,6 +105,48 @@ function createMarkerLayer() {
 }
 
 /**
+ * Crée la couche des parcelles.
+ * @return {ol.layer.Vector}
+ */
+function createParcelleLayer() {
+  // http://openlayers.org/en/master/apidoc/ol.layer.Vector.html
+  return new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    zIndex: 20,
+  });
+}
+
+/**
+ * Exécute une requête GetFeatureInfo.
+ * @param coordinate
+ * @param resolution
+ * @param projection
+ * @param params
+ * @return {Promise<any | never>}
+ */
+function getFeatureInfo(coordinate, resolution, projection, params) {
+  var url = new ol.source.TileWMS({ url: 'https://www.tefenua.gov.pf/api/wms' })
+    .getGetFeatureInfoUrl(coordinate, resolution, projection, params);
+  return fetch(url).then(function (result) {return result.json();});
+}
+
+/**
+ * Retourne la parcelle cliquée.
+ * @param coordinate
+ * @param resolution
+ * @param projection
+ * @return {Promise<any|never>}
+ */
+function getCadastreFeatureInfo(coordinate, resolution, projection) {
+  return getFeatureInfo(coordinate, resolution, projection, {
+    feature_count: 10,
+    layers: 'TEFENUA:Cadastre_Parcelle',
+    query_layers: 'TEFENUA:Cadastre_Parcelle',
+    info_format: 'application/json',
+  });
+}
+
+/**
  * Retourne les identifiants de la matrice de tuiles.
  * @param projection
  * @param count
@@ -117,6 +159,39 @@ function getMatrixIds(projection, count) {
     matrixIds.push(projection + ':' + i);
   }
   return matrixIds;
+}
+
+/**
+ * Créé la couche du cadastre.
+ * @return {ol.layer.Tile}
+ */
+function createCadastreLayer() {
+  // http://openlayers.org/en/master/apidoc/ol.layer.Tile.html
+  return new ol.layer.Tile({
+    zIndex: 10,
+    // http://openlayers.org/en/master/apidoc/ol.source.WMTS.html
+    source: new ol.source.WMTS({
+      url: 'https://www.tefenua.gov.pf/api/wmts',
+      format: 'image/png',
+      layer: 'TEFENUA:CADASTRE',
+      style: '',
+      matrixSet: 'EPSG:4326',
+      projection: ol.proj.get('EPSG:4326'),
+      // Configuration des requêtes WMTS
+      tileGrid: new ol.tilegrid.WMTS({
+        extent: [
+          -154.722673420735,
+          -23.9062162869884,
+          -134.929174786833,
+          -8.78168580956794,
+        ],
+        matrixIds: getMatrixIds('EPSG:4326', MAP_RESOLUTIONS.length),
+        origin: [-180, 90],
+        resolutions: MAP_RESOLUTIONS,
+        tileSize: 256,
+      }),
+    }),
+  });
 }
 
 /**
