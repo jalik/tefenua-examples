@@ -1,4 +1,17 @@
 /**
+ * Créé une vue de carte par défaut.
+ * @return {ol.View}
+ */
+function createDefaultMapView() {
+  // http://openlayers.org/en/master/apidoc/ol.View.html
+  return new ol.View({
+    center: [-149.544155, -17.526540],
+    zoom: 16,
+    projection: ol.proj.get('EPSG:4326'),
+  });
+}
+
+/**
  * Créé un marqueur.
  * @param lonLat
  * @return {ol.Feature}

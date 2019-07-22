@@ -1,21 +1,13 @@
-// Ce fichier permet d'initialiser la carte TeFenua
-// via OpenLayers.
-
 // Initialise la carte TeFenua quand le DOM est prêt
 document.addEventListener('DOMContentLoaded', function () {
   // Prépare la couche TeFenua
   var tefenuaLayer = createTeFenuaLayer();
 
+  // Prépare la vue de la carte
+  var mapView = createDefaultMapView();
+
   // Prépare la couche des marqueurs.
   var markerLayer = createMarkerLayer();
-
-  // Prépare la vue de la carte
-  // http://openlayers.org/en/master/apidoc/ol.View.html
-  var mapView = new ol.View({
-    center: [-149.544155, -17.526540],
-    zoom: 16,
-    projection: ol.proj.get('EPSG:4326'),
-  });
 
   // Prépare la carte OpenLayers
   // http://openlayers.org/en/master/apidoc/ol.Map.html
