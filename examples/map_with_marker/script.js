@@ -13,9 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var marker = createMarkerFeature(map.getView().getCenter());
   markerLayer.getSource().addFeature(marker);
 
-  // Ajoute un marqueur à l'emplacement cliqué.
+  // Surveille les clics sur la carte.
   map.on('click', function (ev) {
     console.log('clicked @', ev.coordinate);
+
+    // Ajoute un marqueur à l'emplacement cliqué.
     var newMarker = createMarkerFeature(ev.coordinate);
     markerLayer.getSource().addFeature(newMarker);
   });

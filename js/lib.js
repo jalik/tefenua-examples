@@ -120,7 +120,7 @@ function getMatrixIds(projection, count) {
 }
 
 /**
- * Créé une couche TeFenua.
+ * Créé la couche TeFenua.
  * @return {ol.layer.Tile}
  */
 function createTeFenuaLayer() {
