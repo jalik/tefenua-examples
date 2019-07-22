@@ -1,4 +1,30 @@
 /**
+ * Résolutions de la carte TeFenua.
+ * @type {number[]}
+ */
+var MAP_RESOLUTIONS = [
+  0.703125,
+  0.3515625,
+  0.17578125,
+  0.087890625,
+  0.0439453125,
+  0.02197265625,
+  0.010986328125,
+  0.0054931640625,
+  0.00274658203125,
+  0.001373291015625,
+  0.0006866455078125,
+  0.0003433227539062,
+  0.0001716613769531,
+  0.0000858306884766,
+  0.0000429153442383,
+  0.0000214576721191,
+  0.0000107288360596,
+  0.0000053644180298,
+  0.0000026822090149,
+];
+
+/**
  * Créé une vue de carte par défaut.
  * @return {ol.View}
  */
@@ -19,16 +45,17 @@ function createDefaultMapView() {
 function createDefaultMap(layers) {
   // http://openlayers.org/en/master/apidoc/ol.Map.html
   return new ol.Map({
-    // N'afficher aucun contrôle
+    // N'afficher aucun contrôle.
     controls: [],
-    // Couches de la carte
+    // Couches de la carte.
     layers: layers,
-    // ID de l'élément où afficher la carte
+    // ID de l'élément où afficher la carte.
     target: 'map',
-    // Charger la carte pendant les animations
+    // Charger la carte pendant les animations.
     loadTilesWhileAnimating: false,
-    // Charger la carte pendant les interactions
+    // Charger la carte pendant les interactions.
     loadTilesWhileInteracting: false,
+    // Créé la vue par défaut.
     view: createDefaultMapView(),
   });
 }
@@ -43,7 +70,7 @@ function createMarkerFeature(lonLat) {
   var marker = new ol.Feature({
     geometry: new ol.geom.Point(lonLat),
   });
-  // Définit le style du marqueur
+  // Définit le style du marqueur.
   marker.setStyle(createMarkerStyle);
   return marker;
 }
@@ -54,9 +81,6 @@ function createMarkerFeature(lonLat) {
 function createMarkerStyle() {
   return new ol.style.Style({
     // http://openlayers.org/en/master/apidoc/ol.style.Icon.html
-    fill: new ol.style.Fill({
-      color: '#FFFFFF',
-    }),
     image: new ol.style.Icon({
       anchor: [0.5, 1],
       anchorXUnits: 'fraction',
@@ -81,20 +105,25 @@ function createMarkerLayer() {
 }
 
 /**
+ * Retourne les identifiants de la matrice de tuiles.
+ * @param projection
+ * @param count
+ * @return {Array}
+ */
+function getMatrixIds(projection, count) {
+  var matrixIds = [];
+
+  for (var i = 0; i < count; i++) {
+    matrixIds.push(projection + ':' + i);
+  }
+  return matrixIds;
+}
+
+/**
  * Créé une couche TeFenua.
  * @return {ol.layer.Tile}
  */
 function createTeFenuaLayer() {
-  // Définit les résolutions pour chaque niveau de zoom de la carte
-  var resolutions = getTeFenuaMapResolutions();
-
-  // Prépare les IDs des matrices de tuiles
-  var matrixIds = [];
-  for (var i = 0; i < resolutions.length; i++) {
-    matrixIds.push('EPSG:4326:' + i);
-  }
-
-  // Prépare la couche TeFenua
   // http://openlayers.org/en/master/apidoc/ol.layer.Tile.html
   return new ol.layer.Tile({
     zIndex: 2,
@@ -114,39 +143,11 @@ function createTeFenuaLayer() {
           0,
           52.70855,
         ],
-        matrixIds: matrixIds,
+        matrixIds: getMatrixIds('EPSG:4326', MAP_RESOLUTIONS.length),
         origin: [-180, 90],
-        resolutions: resolutions,
+        resolutions: MAP_RESOLUTIONS,
         tileSize: 256,
       }),
     }),
   });
-}
-
-/**
- * Retourne les résolutions pour chaque niveau de zoom de la carte TeFenua.
- * @return {number[]}
- */
-function getTeFenuaMapResolutions() {
-  return [
-    0.703125,
-    0.3515625,
-    0.17578125,
-    0.087890625,
-    0.0439453125,
-    0.02197265625,
-    0.010986328125,
-    0.0054931640625,
-    0.00274658203125,
-    0.001373291015625,
-    0.0006866455078125,
-    0.0003433227539062,
-    0.0001716613769531,
-    0.0000858306884766,
-    0.0000429153442383,
-    0.0000214576721191,
-    0.0000107288360596,
-    0.0000053644180298,
-    0.0000026822090149,
-  ];
 }
