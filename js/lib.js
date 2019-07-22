@@ -31,8 +31,8 @@ var MAP_RESOLUTIONS = [
 function createDefaultMapView() {
   // http://openlayers.org/en/master/apidoc/ol.View.html
   return new ol.View({
-    center: [-149.544155, -17.526540],
-    zoom: 16,
+    center: [-149.57056403160095, -17.54319190979004],
+    zoom: 18,
     projection: ol.proj.get('EPSG:4326'),
   });
 }
