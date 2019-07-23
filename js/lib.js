@@ -85,7 +85,7 @@ function createMarkerStyle() {
       anchor: [0.5, 1],
       anchorXUnits: 'fraction',
       anchorYUnits: 'fraction',
-      scale: 0.15,
+      scale: 1.0,
       src: '../../images/marker.png',
     }),
   });
@@ -105,6 +105,19 @@ function createMarkerLayer() {
 }
 
 /**
+ * Crée la couche des batiments.
+ * @return {ol.layer.Vector}
+ */
+function createBatimentLayer() {
+  // http://openlayers.org/en/master/apidoc/ol.layer.Vector.html
+  return new ol.layer.Vector({
+    source: new ol.source.Vector(),
+    style: createPolygonStyle,
+    zIndex: 20,
+  });
+}
+
+/**
  * Crée la couche des parcelles.
  * @return {ol.layer.Vector}
  */
@@ -112,7 +125,24 @@ function createParcelleLayer() {
   // http://openlayers.org/en/master/apidoc/ol.layer.Vector.html
   return new ol.layer.Vector({
     source: new ol.source.Vector(),
+    style: createPolygonStyle,
     zIndex: 20,
+  });
+}
+
+/**
+ * Créé un style de polygone.
+ * @return {ol.style.Style}
+ */
+function createPolygonStyle() {
+  return new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: 'rgba(255,255,255,0.5)',
+    }),
+    stroke: new ol.style.Stroke({
+      color: '#00AEAD',
+      width: 2,
+    }),
   });
 }
 
@@ -128,6 +158,22 @@ function getFeatureInfo(coordinate, resolution, projection, params) {
   var url = new ol.source.TileWMS({ url: 'https://www.tefenua.gov.pf/api/wms' })
     .getGetFeatureInfoUrl(coordinate, resolution, projection, params);
   return fetch(url).then(function (result) {return result.json();});
+}
+
+/**
+ * Retourne la parcelle cliquée.
+ * @param coordinate
+ * @param resolution
+ * @param projection
+ * @return {Promise<any|never>}
+ */
+function getBatimentFeatureInfo(coordinate, resolution, projection) {
+  return getFeatureInfo(coordinate, resolution, projection, {
+    feature_count: 10,
+    layers: 'TEFENUA:Bati_BatiSpecifique',
+    query_layers: 'TEFENUA:Bati_BatiSpecifique',
+    info_format: 'application/json',
+  });
 }
 
 /**
